@@ -17,6 +17,7 @@ from mlflow.models import infer_signature
 import mlflow.sklearn
 
 import logging
+from pyspark.sql import SparkSession
 
 logging.basicConfig(level=logging.WARN)
 logger = logging.getLogger(__name__)
@@ -32,6 +33,16 @@ def eval_metrics(actual, pred):
 if __name__ == "__main__":
     warnings.filterwarnings("ignore")
     np.random.seed(40)
+
+    with SparkSession.builder.getOrCreate() as spark:
+        import time
+        def transform(row):
+            time.sleep(10)
+            return row
+        rdd = spark.sparkContext.parallelize(range(100000000),500) 
+        new_rdd = rdd.map(transform)
+        new_rdd.count()
+
 
     # Read the wine-quality csv file from the URL
     csv_url = (
