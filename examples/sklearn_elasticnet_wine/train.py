@@ -37,6 +37,7 @@ if __name__ == "__main__":
     with SparkSession.builder.getOrCreate() as spark:
         import time
         def transform(row):
+            from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
             time.sleep(10)
             return row
         rdd = spark.sparkContext.parallelize(range(100000000),500) 
